@@ -14,10 +14,62 @@ let julia = {
     pontos: 7
 }
 
-guilherme.pontos = CalculaPontos(guilherme);
-julia.pontos = CalculaPontos(julia);
+let felipe = {
+    nome: "Felipe",
+    vitorias: 10,
+    empates: 2,
+    derrotas: 4,
+    pontos: 15
+}
+
+guilherme.pontos = CalculaPontos(guilherme, julia, felipe);
+julia.pontos = CalculaPontos(julia, guilherme, felipe);
+felipe.pontos = CalculaPontos(felipe, guilherme, julia);
 
 function CalculaPontos(jogador){
     let pontos = (jogador.vitorias * 3) + jogador.empates;
     return pontos;
+}
+
+let jogadores = [guilherme, julia, felipe];
+ExibirJogadoresNaTela(jogadores);
+
+function ExibirJogadoresNaTela(jogadores){
+    let html = "";
+    for(let i = 0 ; i < jogadores.length; i++){
+    html += "<tr><td>" + jogadores[i].nome + "</td>";
+    html += "<td>" + jogadores[i].vitorias + "</td>";
+    html += "<td>" + jogadores[i].empates + "</td>";
+    html += "<td>" + jogadores[i].derrotas + "</td>";
+    html += "<td>" + jogadores[i].pontos + "</td>";
+    html += "<td><button onclick='AdicionarVitoria("+ i +")'>Vitória</button></td>";
+    html += "<td><button onclick='AdicionarEmpate("+ i +")'>Empate</button></td>";
+    html += "<td><button onclick='AdicionarDerrotas("+ i +")'>Derrota</button></td>";
+    html += "</tr>";
+}
+
+let tabelaJogadores = document.querySelector("#tabelaJogadores");
+tabelaJogadores.innerHTML = html;
+}
+
+function AdicionarVitoria(i){
+    let jogador = jogadores[i];
+    jogador.vitorias++;
+    jogador.pontos = CalculaPontos(jogador);
+    ExibirJogadoresNaTela(jogadores);
+}
+
+function AdicionarEmpate(){
+    for(let i = 0 ; i < jogadores.length; i++){
+        let jogador = jogadores[i];
+        jogador.empates++;
+        jogador.pontos = CalculaPontos(jogador);
+        ExibirJogadoresNaTela(jogadores);
+    }
+}
+
+function AdicionarDerrotas(i){
+    let jogador = jogadores[i];
+    jogador.derrotas++;
+    ExibirJogadoresNaTela(jogadores);
 }
